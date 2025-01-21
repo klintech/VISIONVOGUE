@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionVogue - Your Cart</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">VisionVogue</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="#" id="virtual-try-on">Virtual Try-On</a></li>
+                <li><a href="cart.html" id="cart-link">Cart <span id="cart-count">0</span></a></li>
+                <li><a href="#" id="wishlist-link">Wishlist <span id="wishlist-count">0</span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="cart" class="cart-section">
+            <h1>Your Shopping Cart</h1>
+            <div id="cart-items"></div>
+            <div id="cart-empty" class="hidden">
+                <p>You don't have any items in your cart.</p>
+                <a href="products.html" class="cta-button">Continue Shopping</a>
+            </div>
+            <div id="cart-summary" class="hidden">
+                <div id="cart-total">
+                    <h3>Total: $<span id="total-amount">0.00</span></h3>
+                </div>
+                <button id="checkout-button" class="cta-button">Proceed to Checkout</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About VisionVogue</h3>
+                <p>We're passionate about providing high-quality eyewear that combines style, comfort, and functionality.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Shipping & Returns</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 VisionVogue. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="virtual-try-on-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Virtual Try-On</h2>
+            <div id="virtual-try-on-container">
+                <video id="webcam" autoplay playsinline></video>
+                <canvas id="overlay"></canvas>
+                <div id="glasses-options"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
