@@ -92,7 +92,7 @@ const products = [
     },
   ]
   
-  // Cart functionality
+ // Cart functionality
 let cart = JSON.parse(localStorage.getItem("cart")) || []
 let wishlist = JSON.parse(localStorage.getItem("wishlist")) || []
 
@@ -239,43 +239,72 @@ function setupFilters() {
 
 // Product detail functionality
 function displayProductDetail() {
+  const productImage = document.getElementById("product-image")
   const productInfo = document.getElementById("product-info")
   const productDescription = document.getElementById("product-description")
   const productReviews = document.getElementById("product-reviews")
-  if (!productInfo || !productDescription || !productReviews) return
+  if (!productImage || !productInfo || !productDescription || !productReviews) return
 
   const urlParams = new URLSearchParams(window.location.search)
   const productId = Number.parseInt(urlParams.get("id"))
   const product = products.find((p) => p.id === productId)
 
   if (product) {
+    productImage.innerHTML = `
+      <img src="${product.image}" alt="${product.name}">
+      <div class="product-thumbnails">
+        <img src="${product.image}" alt="${product.name}" class="thumbnail active">
+        <img src="https://via.placeholder.com/100x100?text=Angle+2" alt="${product.name} - Angle 2" class="thumbnail">
+        <img src="https://via.placeholder.com/100x100?text=Angle+3" alt="${product.name} - Angle 3" class="thumbnail">
+      </div>
+    `
+
     productInfo.innerHTML = `
-            <h1>${product.name}</h1>
-            <img src="${product.image}" alt="${product.name}">
-            <p>Price: $${product.price.toFixed(2)}</p>
-            <p>Category: ${product.category}</p>
-            <p>Style: ${product.style}</p>
-            <p>Color: ${product.color}</p>
-        `
+      <h1>${product.name}</h1>
+      <p class="price">$${product.price.toFixed(2)}</p>
+      <div class="product-rating">
+        <div class="stars" data-rating="4"></div>
+        <span>(32 reviews)</span>
+      </div>
+      <p><strong>Category:</strong> ${product.category}</p>
+      <p><strong>Style:</strong> ${product.style}</p>
+      <p><strong>Color:</strong> ${product.color}</p>
+      <div class="product-actions">
+        <button id="add-to-cart" class="cta-button">Add to Cart</button>
+        <button id="add-to-wishlist" class="secondary-button">Add to Wishlist</button>
+      </div>
+    `
 
     productDescription.innerHTML = `
-            <h2>Product Description</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        `
+      <h2>Product Description</h2>
+      <p>Experience unparalleled style and comfort with our ${product.name}. These ${product.category} glasses feature a sleek ${product.style} design in a stunning ${product.color} finish. Perfect for any occasion, these glasses combine fashion-forward aesthetics with premium quality materials to ensure both your vision and your look are always on point.</p>
+      <ul>
+        <li>High-quality ${product.category} lenses</li>
+        <li>Durable and lightweight frame</li>
+        <li>UV protection</li>
+        <li>Adjustable nose pads for a comfortable fit</li>
+        <li>Comes with a protective case and cleaning cloth</li>
+      </ul>
+    `
 
     productReviews.innerHTML = `
-            <h2>Customer Reviews</h2><h2>Customer Reviews</h2>
-            <div class="review">
-                <div class="stars" data-rating="5"></div>
-                <p>"These glasses are amazing! Perfect fit and great quality."</p>
-                <span>- Alex T.</span>
-            </div>
-            <div class="review">
-                <div class="stars" data-rating="4"></div>
-                <p>"Very stylish and comfortable. Highly recommend!"</p>
-                <span>- Jamie L.</span>
-            </div>
-        `
+      <h2>Customer Reviews</h2>
+      <div class="review">
+        <div class="stars" data-rating="5"></div>
+        <p>"These glasses are amazing! Perfect fit and great quality. I've received so many compliments since I started wearing them."</p>
+        <span>- Alex T.</span>
+      </div>
+      <div class="review">
+        <div class="stars" data-rating="4"></div>
+        <p>"Very stylish and comfortable. The virtual try-on feature helped me choose the perfect pair. Highly recommend!"</p>
+        <span>- Jamie L.</span>
+      </div>
+      <div class="review">
+        <div class="stars" data-rating="5"></div>
+        <p>"Exceptional customer service and quick delivery. The glasses exceeded my expectations in terms of both style and quality."</p>
+        <span>- Sam R.</span>
+      </div>
+    `
 
     const addToCartButton = document.getElementById("add-to-cart")
     const addToWishlistButton = document.getElementById("add-to-wishlist")
@@ -287,6 +316,18 @@ function displayProductDetail() {
     if (addToWishlistButton) {
       addToWishlistButton.onclick = () => addToWishlist(product.id)
     }
+
+    // Set up thumbnail click events
+    const thumbnails = document.querySelectorAll(".thumbnail")
+    const mainImage = document.querySelector("#product-image > img:first-child")
+
+    thumbnails.forEach((thumbnail) => {
+      thumbnail.addEventListener("click", () => {
+        mainImage.src = thumbnail.src
+        thumbnails.forEach((t) => t.classList.remove("active"))
+        thumbnail.classList.add("active")
+      })
+    })
   } else {
     productInfo.innerHTML = "<p>Product not found</p>"
   }
@@ -376,6 +417,7 @@ function showNotification(message) {
 function initPage() {
   updateCartCount()
   updateWishlistCount()
+  setupMobileMenu()
 
   const path = window.location.pathname
 
@@ -508,5 +550,44 @@ function setupThemeSwitcher() {
 
 function setupVirtualTryOn() {
   // Implement virtual try-on functionality
+}
+
+// Mobile menu functionality
+function setupMobileMenu() {
+  const hamburger = document.querySelector(".hamburger")
+  const navMenu = document.querySelector("nav ul")
+  const mobileVirtualTryOn = document.getElementById("mobile-virtual-try-on")
+  const mobileWishlistLink = document.getElementById("mobile-wishlist-link")
+
+  if (hamburger && navMenu) {
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.toggle("active")
+      navMenu.classList.toggle("show")
+    })
+
+    // Close menu when a link is clicked
+    document.querySelectorAll("nav ul li a").forEach((link) => {
+      link.addEventListener("click", () => {
+        hamburger.classList.remove("active")
+        navMenu.classList.remove("show")
+      })
+    })
+  }
+
+  if (mobileVirtualTryOn) {
+    mobileVirtualTryOn.addEventListener("click", openVirtualTryOn)
+  }
+
+  if (mobileWishlistLink) {
+    mobileWishlistLink.addEventListener("click", openWishlist)
+  }
+}
+
+function openVirtualTryOn() {
+  // Implement virtual try-on functionality
+}
+
+function openWishlist() {
+  // Implement wishlist functionality
 }
 
